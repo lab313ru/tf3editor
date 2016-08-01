@@ -1,4 +1,5 @@
 ﻿using System;
+using Helpers;
 using IniFiles;
 
 namespace TF3Editor
@@ -59,12 +60,12 @@ namespace TF3Editor
         {
             byte[] retn = new byte[8];
 
-            retn.WriteUInt16BE(0, _Time);
+            retn.WriteWord(0, _Time);
             retn[2] = _X;
             retn[3] = _Y;
             retn[4] = _DifficultyMask;
             retn[5] = _ID;
-            retn.WriteUInt16BE(6, _Params);
+            retn.WriteWord(6, _Params);
 
             return retn;
         }
@@ -81,13 +82,13 @@ namespace TF3Editor
 
         public Event(byte[] array, int offset)
         {
-            _Time = array.ReadUInt16BE(offset);
+            _Time = array.ReadWord(offset);
             offset += 2;
             _X = array[offset++];
             _Y = array[offset++];
             _DifficultyMask = array[offset++];
             _ID = array[offset++];
-            _Params = array.ReadUInt16BE(offset);
+            _Params = array.ReadWord(offset);
         }
 
         public Event()

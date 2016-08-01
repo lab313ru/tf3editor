@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Helpers;
+using PluginVideoSega;
 
 namespace TF3Editor
 {
@@ -17,21 +19,6 @@ namespace TF3Editor
         {
             this.Text = Title;
             ShowElements(false);
-            gridLevel.MakeDoubleBuffered(true);
-            cbbTileIndex.MakeDoubleBuffered(true);
-            pnlMain.Panel1MinSize = 32 + SystemInformation.VerticalScrollBarWidth;
-            pnlMain.Panel2MinSize = 32 + SystemInformation.VerticalScrollBarWidth;
-            cbbTileIndex.ImageList = ilTiles;
-            cbbPalIndex.ImageList = ilPalettes;
-
-            ilTiles.ColorDepth = ColorDepth.Depth16Bit;
-            ilPalettes.ColorDepth = ColorDepth.Depth16Bit;
-            ilBlocks.ColorDepth = ColorDepth.Depth16Bit;
-            ilTiles.ImageSize = new Size(16, 16);
-            ilPalettes.ImageSize = new Size(16, 16);
-            ilBlocks.ImageSize = new System.Drawing.Size(32, 32);
-
-            PrepareTables();
 
             cbbEventType.Items.Clear();
             cbbEventType.Items.AddRange(Consts.eventTypes);
@@ -43,7 +30,6 @@ namespace TF3Editor
 
         private void ShowElements(bool Visible)
         {
-            pnlMain.Visible = Visible;
             pnlEditorTop.Visible = Visible;
             mnuCloseROM.Enabled = Visible;
             cbbLevels.Visible = Visible;
@@ -61,26 +47,12 @@ namespace TF3Editor
         byte[] baRom = null;
 
         Level level = null;
-        byte bCurrentBlock = 0;
-        byte bCurrentTile = 0;
         byte iRomChangeIndex = 0;
         bool bChanged
         {
             get { return mnuSaveROMAs.Enabled; }
             set { this.Text = String.Format("{0} [{1}]" + (value ? "*" : ""), Title, sRomFile).Replace("[]", ""); mnuSaveROMAs.Enabled = value; }
         }
-        ImageList ilBlocks = new ImageList();
-        ImageList ilTiles = new ImageList();
-        ImageList ilPalettes = new ImageList();
-        byte[] baLevelMapping = null;
-        ushort[] baMapping = null;
-        Color[] caPalette = null;
-        byte[] baTiles = null;
-        byte[] baSprites = null;
-        bool mouseDown = false;
-        bool isPlaneA = true;
-        Bitmap overBlock = null;
-        DataGridViewCell overIndex = null;
         #endregion
 
         #region Get and Set Level Data
@@ -99,57 +71,17 @@ namespace TF3Editor
             dlgSaveRom.FileName = "tf3_edit" + iRomChangeIndex.ToString();
             if (dlgSaveRom.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Mapper.ApplyMapping(ref baLevelMapping, baMapping, isPlaneA);
-
-                byte[] baRomCopy = (byte[])baRom.Clone();
-
-                uint tableSize = (baRomCopy.ReadUInt32BE(Consts.tblLevelsMain + 2) - 2) / 12;
-
-                uint shift = 0;
-                for (int i = 0; i < tableSize; i++)
-                {
-                    uint dataOffset = baRomCopy.ReadUInt32BE(Consts.tblLevelsMain + i * 0xC + 2);
-                    uint decodedSize = baRomCopy.ReadUInt32BE(Consts.tblLevelsMain + i * 0xC + 6);
-                    uint encodedSize = baRomCopy.ReadUInt32BE(Consts.tblLevelsMain + i * 0xC + 0xA);                    
-
-                    if (i == level.Index + 0x10)
-                    {
-                        shift = encodedSize;
-                        
-                        byte[] baLZH = new byte[baLevelMapping.Length];
-                        encodedSize = (uint)Compression.EncodeLZH(baLevelMapping, baLZH, baLZH.Length);
-                        shift = encodedSize - shift;
-
-                        baRom.WriteUInt32BE(Consts.tblLevelsMain + i * 0xC + 2, dataOffset);
-                        baRom.WriteUInt32BE(Consts.tblLevelsMain + i * 0xC + 6, decodedSize);
-                        baRom.WriteUInt32BE(Consts.tblLevelsMain + i * 0xC + 0xA, encodedSize);
-
-                        Array.Copy(baLZH, 0, baRom, Consts.tblLevelsMain + dataOffset, encodedSize);
-                    }
-                    else
-                    {
-                        baRom.WriteUInt32BE(Consts.tblLevelsMain + i * 0xC + 2, dataOffset + shift);
-                        baRom.WriteUInt32BE(Consts.tblLevelsMain + i * 0xC + 6, decodedSize);
-                        baRom.WriteUInt32BE(Consts.tblLevelsMain + i * 0xC + 0xA, encodedSize);
-
-                        byte[] temp = new byte[encodedSize];
-                        Array.Copy(baRomCopy, Consts.tblLevelsMain + dataOffset, temp, 0, encodedSize);
-
-                        Array.Copy(temp, 0, baRom, Consts.tblLevelsMain + dataOffset + shift, encodedSize);
-                    }
-                }
-
                 int checksum = 0;
                 int offset = 0x200;
                 for (int i = 0; i < 0xFFC0; i++, offset += 8)
                 {
-                    checksum += baRom.ReadUInt16BE(offset);
-                    checksum += baRom.ReadUInt16BE(offset + 2);
-                    checksum += baRom.ReadUInt16BE(offset + 4);
-                    checksum += baRom.ReadUInt16BE(offset + 6);
+                    checksum += baRom.ReadWord(offset);
+                    checksum += baRom.ReadWord(offset + 2);
+                    checksum += baRom.ReadWord(offset + 4);
+                    checksum += baRom.ReadWord(offset + 6);
                 }
 
-                baRom.WriteUInt16BE(0x18E, (ushort)checksum);
+                baRom.WriteWord(0x18E, (ushort)checksum);
 
                 var romWrite = new BinaryWriter(File.Open(dlgSaveRom.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read));
                 romWrite.Write(baRom, 0, baRom.Length);
@@ -161,40 +93,12 @@ namespace TF3Editor
 
         private void GetLevelData()
         {
-            baTiles = level.GetTiles();
-
-            baLevelMapping = level.GetMapping();
-            baMapping = Mapper.LoadMapping(baLevelMapping, isPlaneA);
-
-            baSprites = level.GetSprites();
-
-            ilPalettes.Images.Clear();
-            caPalette = level.GetPalette();
-            Graphics gr = null;
-
-            for (int y = 0; y < 2; y++)
-            {
-                Bitmap bmp = new Bitmap(8, 8);
-                for (int x = 0; x < 16; x++)
-                    using (gr = Graphics.FromImage(bmp))
-                        gr.FillRectangle(new SolidBrush(caPalette[y * 16 + x]), x, 0, 1, 8);
-
-                Bitmap image = new Bitmap(ilPalettes.ImageSize.Width, ilPalettes.ImageSize.Height, System.Drawing.Imaging.PixelFormat.Format16bppRgb555);
-                gr = Graphics.FromImage(image);
-                gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-
-                gr.DrawImage(bmp, new Rectangle(0, 0, image.Width, image.Height));
-                gr.Dispose();
-
-                ilPalettes.Images.Add(bmp);
-            }
-
             //Events
             ReadLevelEvents();
 
             cbbMusicIndex.SelectedIndex = level.MusicIndex;
             cbbBossMusicIndex.SelectedIndex = level.BossMusicIndex - 8;
-            pbBossFace.Image = level.BossFace(2);
+            pbBossFace.Image = level.BossFace();
             tbStageName.Text = level.LoadingScreen.Stage;
             tbTargetName.Text = level.LoadingScreen.Target;
             tbWeakPointName.Text = level.LoadingScreen.WeakPoint;
@@ -299,98 +203,6 @@ namespace TF3Editor
         }
         #endregion
 
-        #region Tiles Get Data
-        private void GetCurrentTileInfo()
-        {
-            int selectedTileIdx = bCurrentBlock * 0x10 + bCurrentTile;
-
-            cbbPalIndex.SelectedIndex = Mapper.PalIdx(baMapping[selectedTileIdx]);
-            chkHFlip.Checked = Mapper.HF(baMapping[selectedTileIdx]);
-            chkVFlip.Checked = Mapper.VF(baMapping[selectedTileIdx]);
-            cbbTileIndex.SelectedIndex = Mapper.TileIdx(baMapping[selectedTileIdx]);
-
-            btnCurrentTile.Text = String.Format("[{0:D}x{1:D}]", bCurrentTile / 4, bCurrentTile % 4);
-        }
-        #endregion
-
-        #region Prepare Tables
-        private void RedrawLevelTable()
-        {
-            gridLevel.Columns.Clear();
-            gridLevel.Rows.Clear();
-            for (int x = 0; x < 0x200; x++)
-            {
-                DataGridViewButtonColumn img = new DataGridViewButtonColumn();
-                img.FillWeight = 1;
-                img.FlatStyle = FlatStyle.Flat;
-                img.MinimumWidth = 32;
-                img.Width = 32;
-                gridLevel.Columns.Add(img);
-            }
-
-            for (int y = 0; y < (isPlaneA ? 16 : 8); y++)
-            {
-                gridLevel.Rows.Add();
-                gridLevel.Rows[y].Height = 32;
-            }
-        }
-
-        private void PrepareTables()
-        {
-            //Tiles
-            cbbTileIndex.ItemHeight = 24;
-            for (int i = 0; i < 0x200; i++)
-            {
-                ImageComboBox.ImageComboBoxItem item = new ImageComboBox.ImageComboBoxItem(i, String.Format("{0:X3}", i), 0);
-                cbbTileIndex.Items.Add(item);
-            }
-
-            //Palettes
-            cbbPalIndex.ItemHeight = 24;
-            for (int i = 0; i < 2; i++)
-            {
-                ImageComboBox.ImageComboBoxItem item = new ImageComboBox.ImageComboBoxItem(i, String.Format("{0:X}", i), 0);
-                cbbPalIndex.Items.Add(item);
-            }
-
-            //Blocks
-            pnlBlocks.SuspendLayout();
-            for (int x = 0; x < 0x100; x++)
-            {
-                Button btn = new Button();
-                btn.Size = new Size(32, 32);
-                btn.FlatStyle = FlatStyle.Popup;
-                btn.Padding = new System.Windows.Forms.Padding(0);
-                btn.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-                btn.ImageList = ilBlocks;
-                btn.ImageAlign = ContentAlignment.MiddleCenter;
-                btn.ImageIndex = x;
-                btn.Tag = (byte)x;
-                btn.Click += new EventHandler(pnlBlocks_CheckBlockClick);
-                
-                pnlBlocks.Controls.Add(btn);
-                if ((x + 1) % 7 == 0) pnlBlocks.SetFlowBreak(btn, true);
-            }
-            pnlBlocks.ResumeLayout();
-        }
-
-        private void RedrawTables()
-        {
-            ilTiles.Images.Clear();
-            for (ushort i = 0; i < 0x200; i++) ilTiles.Images.Add(Graph.GetZoomTile(baTiles, i, caPalette, 0, false, false, 2));
-
-            ilBlocks.Images.Clear();
-            for (int x = 0; x < 0x100; x++) ilBlocks.Images.Add(Graph.GetZoomBlock(baMapping, baTiles, caPalette, (byte)x, 1));
-
-            pnlBlocks.Invalidate(pnlBlocks.ClientRectangle, true);
-
-            RedrawLevelTable();
-            gridLevel.Invalidate(gridLevel.ClientRectangle);
-
-            pnlBlocks_CheckBlockClick(pnlBlocks.Controls[0] as Button, new EventArgs());
-        }
-        #endregion
-
         #region Menus Work
         private void mnuSaveROMAs_Click(object sender, EventArgs e)
         {
@@ -463,7 +275,7 @@ namespace TF3Editor
             bool show = dlgSaveBmp.ShowDialog() == System.Windows.Forms.DialogResult.OK;
             if (!show) return;
 
-            level.BossFace(1).Save(dlgSaveBmp.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
+            level.BossFace().Save(dlgSaveBmp.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
         }
 
         private void mnuLoadFaceFromBmp_Click(object sender, EventArgs e)
@@ -480,178 +292,10 @@ namespace TF3Editor
             }
 
             level.ApplyBossFace(test);
-            pbBossFace.Image = level.BossFace(2);
+            pbBossFace.Image = level.BossFace();
             bChanged = true;
         }
         #endregion
-
-        #region Level Change
-        private void rbPlaneA_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!(sender as RadioButton).Checked) return;
-
-            isPlaneA = true;
-            if (bChanged) Mapper.ApplyMapping(ref baLevelMapping, baMapping, false);
-            baMapping = Mapper.LoadMapping(baLevelMapping, true);
-
-            RedrawTables();
-        }
-
-        private void rbPlaneB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!(sender as RadioButton).Checked) return;
-
-            isPlaneA = false;
-            if (bChanged) Mapper.ApplyMapping(ref baLevelMapping, baMapping, true);
-            baMapping = Mapper.LoadMapping(baLevelMapping, false);
-
-            RedrawTables();
-        }
-
-        private void cbbLevels_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SaveLevelData(true);
-            
-            if (cbbLevels.SelectedIndex == -1) return;
-
-            level.Index = (byte)cbbLevels.SelectedIndex;
-
-            GetLevelData();
-            RedrawTables();
-        }
-        #endregion
-
-        #region Cells painting
-        private void gridLevel_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
-        {
-            e.CellStyle.Padding = new System.Windows.Forms.Padding(0);
-
-            e.Graphics.DrawImage(ilBlocks.Images[baLevelMapping[(isPlaneA ? 0x4000 : 0x6000) + e.ColumnIndex * gridLevel.RowCount + e.RowIndex]], e.CellBounds);
-            e.PaintContent(e.CellBounds);
-
-            if (overBlock != null && overIndex == gridLevel[e.ColumnIndex, e.RowIndex])
-            {
-                Pen pen = new Pen(Color.White);
-                e.Graphics.DrawImage(overBlock, e.CellBounds);
-
-                e.Graphics.DrawLine(pen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1);
-                e.Graphics.DrawLine(pen, e.CellBounds.Right - 1, e.CellBounds.Top, e.CellBounds.Right - 1, e.CellBounds.Bottom);
-
-                e.Graphics.DrawRectangle(pen, e.CellBounds);
-            }
-            
-            e.Handled = true;
-        }
-        #endregion
-
-        #region Cells Clicking
-        private void gridLevel_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            overBlock = Graph.GetZoomBlock(baMapping, baTiles, caPalette, (byte)bCurrentBlock, 1);
-            overIndex = gridLevel[e.ColumnIndex, e.RowIndex];
-            gridLevel.InvalidateCell(e.ColumnIndex, e.RowIndex);
-        }
-
-        private void gridLevel_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            overBlock = null;
-            overIndex = null;
-            gridLevel.InvalidateCell(e.ColumnIndex, e.RowIndex);
-        }
-
-        private void gridLevel_SelectionChanged(object sender, EventArgs e)
-        {
-            gridLevel.ClearSelection();
-        }
-
-        private void gridLevel_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            mouseDown = (e.Button == System.Windows.Forms.MouseButtons.Left);
-            if (!mouseDown) return;
-            updateLevelCell(e.ColumnIndex, e.RowIndex);
-        }
-
-        private void gridLevel_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            mouseDown = false;
-        }
-
-        private void gridLevel_CellMouseMove(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (mouseDown)
-                updateLevelCell(e.ColumnIndex, e.RowIndex);
-        }
-
-        private void pnlBlocks_CheckBlockClick(object sender, EventArgs e)
-        {
-            bCurrentBlock = (byte)((sender as Button).Tag);
-
-            redrawCurrentBlock();
-            CurrentBlockTiles_Click(pnlCurrentBlock.Controls[0] as Button, new EventArgs());
-        }
-        #endregion
-
-        #region Tile Info Updating
-        private void CurrentBlockTiles_Click(object sender, EventArgs e)
-        {
-            bCurrentTile = (byte)(sender as Button).Tag;
-            GetCurrentTileInfo();
-        }
-
-        private void redrawCurrentBlock()
-        {
-            pnlCurrentBlock.SuspendLayout();
-            for (int i = 0; i < 0x10; i++)
-            {
-                ushort Word = baMapping[bCurrentBlock * 0x10 + (i / 4) * 4 + (i % 4)];
-                byte palIndex = Mapper.PalIdx(Word);
-                bool HF = Mapper.HF(Word);
-                bool VF = Mapper.VF(Word);
-
-                pnlCurrentBlock.Controls[i].BackgroundImage = Graph.GetZoomTile(baTiles, Word, caPalette, palIndex, HF, VF, 4);
-                pnlCurrentBlock.Controls[i].BackgroundImageLayout = ImageLayout.Center;
-                pnlCurrentBlock.Controls[i].Tag = (byte)i;
-            }
-            pnlCurrentBlock.ResumeLayout();
-            ilBlocks.Images[bCurrentBlock] = Graph.GetZoomBlock(baMapping, baTiles, caPalette, (byte)bCurrentBlock, 1);
-            pnlBlocks.Controls[bCurrentBlock].Invalidate();
-        }
-
-        private void updateSelectedTile()
-        {
-            ushort idx = (ushort)cbbTileIndex.SelectedIndex;
-            bool hf = chkHFlip.Checked;
-            bool vf = chkVFlip.Checked;
-            byte PalIndex = (byte)cbbPalIndex.SelectedIndex;
-
-            baMapping[bCurrentBlock * 0x10 + bCurrentTile] = Mapper.EncodeTileInfo(idx, hf, vf, PalIndex);
-            Mapper.ApplyMapping(ref baLevelMapping, baMapping, isPlaneA);
-            bChanged = true;
-
-            redrawCurrentBlock();
-            gridLevel.Invalidate(gridLevel.ClientRectangle);
-        }
-
-        private void updateLevelCell(int cellX, int cellY)
-        {
-            var currentCell = gridLevel.Rows[cellY].Cells[cellX];
-            baLevelMapping[(isPlaneA ? 0x4000 : 0x6000) + currentCell.ColumnIndex * gridLevel.RowCount + currentCell.RowIndex] = bCurrentBlock;
-            Mapper.ApplyMapping(ref baLevelMapping, baMapping, isPlaneA);
-            bChanged = true;
-
-            gridLevel.InvalidateCell(currentCell);
-        }
-
-        private void cbbTileIndex_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            updateSelectedTile();
-        }
-
-        private void cbbPalIndex_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            updateSelectedTile();
-        }
-        #endregion        
 
         private void tbTime_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -819,6 +463,22 @@ namespace TF3Editor
             }
 
             tbEventDescription.Text = text;
+        }
+
+        private void cbbLevels_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SaveLevelData(true);
+
+            if (cbbLevels.SelectedIndex == -1) return;
+
+            level.Index = (byte)cbbLevels.SelectedIndex;
+
+            GetLevelData();
+        }
+
+        private void btnTmxExport_Click(object sender, EventArgs e)
+        {
+            level.TmxExport("test.tmx");
         }
     }
 }

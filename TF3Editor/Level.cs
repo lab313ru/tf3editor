@@ -1,7 +1,10 @@
 ﻿using System;
+using Helpers;
 using System.Collections.Generic;
 using System.Drawing;
 using Unformat;
+using PluginVideoSega;
+using TMX;
 
 namespace TF3Editor
 {
@@ -115,7 +118,7 @@ namespace TF3Editor
 
             private static object[] ParseInfo()
             {
-                uint offset = baRom.ReadUInt32BE(Consts.tblLoadingScreens + bIndex * 4);
+                uint offset = baRom.ReadLong(Consts.tblLoadingScreens + bIndex * 4);
                 object[] strings = baRom.ReadASCIIString((int)offset).Unformat(readInfoFormat);
 
                 return strings;
@@ -125,7 +128,7 @@ namespace TF3Editor
             {
                 int oldOffset = Consts.tblLoadingScreens + bIndex * 4;
                 int newOffset = Consts.tblLoadingScreensNew + bIndex * 76;
-                baRom.WriteUInt32BE(oldOffset, (uint)newOffset);
+                baRom.WriteLong(oldOffset, (uint)newOffset);
 
                 baRom.WriteASCIIString(newOffset, String.Format(writeInfoFormat, Stage == "" ? "\xD" : Stage, Target == "" ? "\xD" : Target, WeakPoint == "" ? "\xD" : WeakPoint));
             }
@@ -164,23 +167,38 @@ namespace TF3Editor
             }
         }
 
-        public Bitmap BossFace(float Zoom)
+        public Bitmap BossFace()
         {
             Bitmap face = new Bitmap(80, 56);
             
-            uint offset = baRom.ReadUInt32BE(Consts.tblBossFaces + bIndex * 4);
+            uint offset = baRom.ReadLong(Consts.tblBossFaces + bIndex * 4);
             byte[] faceBytesEnc = new byte[0x8C0];
             Array.Copy(baRom, Consts.tblBossFaces + offset, faceBytesEnc, 0, faceBytesEnc.Length);
 
             byte[] faceBytesDec = new byte[0x8C0];
             Compression.DecodeRLE(faceBytesEnc, faceBytesDec);
 
-            return Graph.GetZoomBlockFrom2ColorArray(faceBytesDec, 10, Zoom);
+            Color[] palette = new Color[] { Color.Black,
+                Color.Black, Color.Black, Color.Black, Color.Black, Color.Black,
+                Color.Black, Color.Black, Color.Black, Color.Black, Color.Black,
+                Color.Black, Color.Black, Color.Black, Color.Black,
+                Color.White };
+            ushort[] mapping = new ushort[10 * 7];
+
+            for (ushort i = 0; i < 10 * 7; ++i)
+                mapping[i] = Mapper.EncodeTileInfo(i, false, false, 0, false);
+
+            return VideoSega.ImageFromData(faceBytesDec, mapping, palette, 10, 7);
         }
 
         public void ApplyBossFace(Bitmap newBossFace)
         {
-            byte[] bossFaceDec = Graph.GetArrayFrom2ColorBlock(newBossFace);
+            byte[] bossFaceDec;
+            ushort[] mapping;
+            Color[] palette;
+            ushort width, height;
+
+            VideoSega.ImageToData(newBossFace, null, out bossFaceDec, out mapping, out palette, out width, out height);
             byte[] bossFaceEnc = new byte[0x8C0];
             int encSize = Compression.EncodeRLE(bossFaceDec, bossFaceEnc, bossFaceDec.Length);
             
@@ -189,7 +207,7 @@ namespace TF3Editor
             shifts[0] = 0x20;
             for (int i = 0; i < 8; i++)
             {
-                uint offset = Consts.tblBossFaces + baRom.ReadUInt32BE(Consts.tblBossFaces + i * 4);
+                uint offset = Consts.tblBossFaces + baRom.ReadLong(Consts.tblBossFaces + i * 4);
                 byte[] enc = new byte[0x8C0];
                 byte[] dec = new byte[0x8C0];
                 Array.Copy(baRom, offset, enc, 0, enc.Length);
@@ -203,13 +221,13 @@ namespace TF3Editor
                 if (i != 0) shifts[i] = shifts[i - 1] + sizes[i - 1];
                 if (shifts[i] % 2 != 0) shifts[i]++;
 
-                baRom.WriteUInt32BE(Consts.tblBossFaces + i * 4, (uint)shifts[i]);
+                baRom.WriteLong(Consts.tblBossFaces + i * 4, (uint)shifts[i]);
             }
 
             byte[] baRomClone = (byte[])baRom.Clone();
             for (int i = 0; i < 8; i++)
             {
-                uint offset = Consts.tblBossFaces + baRom.ReadUInt32BE(Consts.tblBossFaces + i * 4);
+                uint offset = Consts.tblBossFaces + baRom.ReadLong(Consts.tblBossFaces + i * 4);
                 
                 if (i == bIndex)
                     Array.Copy(bossFaceEnc, 0, baRom, offset, encSize);
@@ -229,9 +247,9 @@ namespace TF3Editor
                 case 2: index = bIndex + 0x00; break;
             }
 
-            uint encodedSize = baRom.ReadUInt32BE(Consts.tblLevelsMain + index * 0xC + 0xA);
-            uint decodedSize = baRom.ReadUInt32BE(Consts.tblLevelsMain + index * 0xC + 6); 
-            uint shift = baRom.ReadUInt32BE(Consts.tblLevelsMain + index * 0xC + 2);
+            uint encodedSize = baRom.ReadLong(Consts.tblLevelsMain + index * 0xC + 0xA);
+            uint decodedSize = baRom.ReadLong(Consts.tblLevelsMain + index * 0xC + 6); 
+            uint shift = baRom.ReadLong(Consts.tblLevelsMain + index * 0xC + 2);
 
             byte[] input = new byte[encodedSize];
             Array.Copy(baRom, Consts.tblLevelsMain + shift, input, 0, encodedSize);
@@ -246,9 +264,22 @@ namespace TF3Editor
             return Decompress(0);//0x300 tiles, but 0x200..0x2FF - only for animation and can't be selected.
         }
 
-        public byte[] GetMapping()
+        public byte[] GetMappingA()
         {
-            return Decompress(1);
+            byte[] mapping = Decompress(1);
+            byte[] retn = new byte[0x1000];
+
+            Array.Copy(mapping, 0, retn, 0, 0x1000);
+            return retn;
+        }
+
+        public byte[] GetMappingB()
+        {
+            byte[] mapping = Decompress(1);
+            byte[] retn = new byte[0x1000];
+
+            Array.Copy(mapping, 0x2000, retn, 0, 0x1000);
+            return retn;
         }
 
         public byte[] GetSprites()
@@ -256,22 +287,58 @@ namespace TF3Editor
             return Decompress(2);
         }
 
-        public Color[] GetPalette()
+        public Color[][] GetPalette()
         {
-            Color[] retn = new Color[0x40];
+            Color[][] retn = new Color[2][];
 
-            int offset = Consts.tblLevelsPalette + bIndex * 0x80;
-            for (int y = 0; y < 2; y++)
-                for (int x = 0; x < 16; x++, offset += 2)
-                {
-                    ushort W = baRom.ReadUInt16BE(offset);
-                    byte r = (byte)((W & 0xE) * 0x10);
-                    byte g = (byte)(((W / 0x10) & 0xE) * 0x10);
-                    byte b = (byte)(((W / 0x100) & 0xE) * 0x10);
-                    retn[y * 16 + x] = Color.FromArgb(r, g, b);
-                }
+            for (int i = 0; i < 2; ++i)
+            {
+                retn[i] = VideoSega.PaletteFromByteArray(baRom, Consts.tblLevelsPalette + bIndex * 0x80 + i * 16);
+            }
 
             return retn;
+        }
+
+        public static int ConvertXYtoTileIndex(ushort width, ushort x, ushort y)
+        {
+            return (x / 2) * 4 + (width / 2) * (y / 2) * 4 + (y % 2) * 2 + (x % 2);
+        }
+
+        public void TmxExport(string path)
+        {
+            string tilesetA = string.Format("{0}-TilesetA.png", Name());
+            string tilesetB = string.Format("{0}-TilesetB.png", Name());
+
+            TmxGenerator tmx = new TmxGenerator();
+
+            const ushort widthAB = 0x200;
+            const ushort heightA = 16;
+            const ushort heightB = 8;
+
+            tmx.WriteMap(widthAB, heightA);
+
+            byte[] tilesAB = GetTiles();
+            Color[][] caPaletteAB = GetPalette();
+
+            ushort[] mappingA = Mapper.ByteMapToWordMap(GetMappingA());
+            ushort[] mappingB = Mapper.ByteMapToWordMap(GetMappingB());
+
+            int countPlaneA = TmxGenerator.TilesetExport(tilesetA, tilesAB, caPaletteAB[0]);
+
+            if (countPlaneA > 0)
+                tmx.WriteTileset("tilesA", tilesetA, caPaletteAB[0][0], 1, 0);
+
+            int countPlaneB = TmxGenerator.TilesetExport(tilesetB, tilesAB, caPaletteAB[1]);
+
+            if (countPlaneB > 0)
+                tmx.WriteTileset("tilesB", tilesetB, caPaletteAB[1][0], 1 + countPlaneA, 0);
+
+            if (countPlaneB > 0)
+                tmx.LayerFromMapping("planeB", mappingB, 1 + countPlaneA, widthAB, heightB, ConvertXYtoTileIndex);
+            if (countPlaneA > 0)
+                tmx.LayerFromMapping("planeA", mappingA, 1, widthAB, heightA, ConvertXYtoTileIndex);
+
+            tmx.Save(path);
         }
     }
 }

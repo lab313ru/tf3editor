@@ -29,13 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Normal");
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Hard");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Mania");
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
+            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("Normal");
+            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("Hard");
+            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem("Mania");
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mnuMain = new System.Windows.Forms.MenuStrip();
             this.mnuROM = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuOpenROM = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,35 +48,6 @@
             this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.dlgOpenRom = new System.Windows.Forms.OpenFileDialog();
-            this.pnlEditorTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.rbPlaneA = new System.Windows.Forms.RadioButton();
-            this.rbPlaneB = new System.Windows.Forms.RadioButton();
-            this.pnlMain = new System.Windows.Forms.SplitContainer();
-            this.pnlBlocks = new System.Windows.Forms.FlowLayoutPanel();
-            this.pnlBlockInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.pnlCurrentBlock = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnTile1 = new System.Windows.Forms.Button();
-            this.btnTile2 = new System.Windows.Forms.Button();
-            this.btnTile3 = new System.Windows.Forms.Button();
-            this.btnTile4 = new System.Windows.Forms.Button();
-            this.btnTile5 = new System.Windows.Forms.Button();
-            this.btnTile6 = new System.Windows.Forms.Button();
-            this.btnTile7 = new System.Windows.Forms.Button();
-            this.btnTile8 = new System.Windows.Forms.Button();
-            this.btnTile9 = new System.Windows.Forms.Button();
-            this.btnTile10 = new System.Windows.Forms.Button();
-            this.btnTile11 = new System.Windows.Forms.Button();
-            this.btnTile12 = new System.Windows.Forms.Button();
-            this.btnTile13 = new System.Windows.Forms.Button();
-            this.btnTile14 = new System.Windows.Forms.Button();
-            this.btnTile15 = new System.Windows.Forms.Button();
-            this.btnTile16 = new System.Windows.Forms.Button();
-            this.chkVFlip = new System.Windows.Forms.CheckBox();
-            this.cbbPalIndex = new ImageComboBox.ImageComboBox();
-            this.cbbTileIndex = new ImageComboBox.ImageComboBox();
-            this.chkHFlip = new System.Windows.Forms.CheckBox();
-            this.btnCurrentTile = new System.Windows.Forms.Button();
-            this.gridLevel = new System.Windows.Forms.DataGridView();
             this.dlgSaveRom = new System.Windows.Forms.SaveFileDialog();
             this.ttTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.cbbLevels = new System.Windows.Forms.ComboBox();
@@ -109,6 +79,7 @@
             this.cbbMusicIndex = new System.Windows.Forms.ComboBox();
             this.tbStageName = new System.Windows.Forms.TextBox();
             this.tpEditor = new System.Windows.Forms.TabPage();
+            this.pnlEditorTop = new System.Windows.Forms.FlowLayoutPanel();
             this.tpEvents = new System.Windows.Forms.TabPage();
             this.lvEvents = new System.Windows.Forms.ListView();
             this.chTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -124,12 +95,9 @@
             this.btnAddEvent = new System.Windows.Forms.Button();
             this.tbEventDescription = new System.Windows.Forms.TextBox();
             this.btnClearEvents = new System.Windows.Forms.Button();
-            this.dlgOpenBmp = new System.Windows.Forms.OpenFileDialog();
-            this.dlgSaveBmp = new System.Windows.Forms.SaveFileDialog();
             this.tpCompression = new System.Windows.Forms.TabPage();
             this.tcCompression = new System.Windows.Forms.TabControl();
             this.tpRleCompression = new System.Windows.Forms.TabPage();
-            this.tpLzhufCompression = new System.Windows.Forms.TabPage();
             this.tblRleData = new System.Windows.Forms.DataGridView();
             this.clRleIdx = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clRleTableOffset = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -141,14 +109,13 @@
             this.pnlRleButtons = new System.Windows.Forms.TableLayoutPanel();
             this.btnRleImport = new System.Windows.Forms.Button();
             this.btnRleExtract = new System.Windows.Forms.Button();
+            this.tpLzhufCompression = new System.Windows.Forms.TabPage();
+            this.dlgOpenBmp = new System.Windows.Forms.OpenFileDialog();
+            this.dlgSaveBmp = new System.Windows.Forms.SaveFileDialog();
+            this.tblEditorButtons = new System.Windows.Forms.TableLayoutPanel();
+            this.btnImportTmx = new System.Windows.Forms.Button();
+            this.btnTmxExport = new System.Windows.Forms.Button();
             this.mnuMain.SuspendLayout();
-            this.pnlEditorTop.SuspendLayout();
-            this.pnlMain.Panel1.SuspendLayout();
-            this.pnlMain.Panel2.SuspendLayout();
-            this.pnlMain.SuspendLayout();
-            this.pnlBlockInfo.SuspendLayout();
-            this.pnlCurrentBlock.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBossFace)).BeginInit();
             this.mnuBossFace.SuspendLayout();
             this.tcMain.SuspendLayout();
@@ -162,6 +129,7 @@
             this.tpRleCompression.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tblRleData)).BeginInit();
             this.pnlRleButtons.SuspendLayout();
+            this.tblEditorButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // mnuMain
@@ -276,469 +244,6 @@
             this.dlgOpenRom.RestoreDirectory = true;
             this.dlgOpenRom.Title = "Please, select TF3 ROM file...";
             // 
-            // pnlEditorTop
-            // 
-            this.pnlEditorTop.AutoSize = true;
-            this.pnlEditorTop.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.pnlEditorTop.Controls.Add(this.rbPlaneA);
-            this.pnlEditorTop.Controls.Add(this.rbPlaneB);
-            this.pnlEditorTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlEditorTop.Location = new System.Drawing.Point(3, 3);
-            this.pnlEditorTop.Name = "pnlEditorTop";
-            this.pnlEditorTop.Size = new System.Drawing.Size(961, 30);
-            this.pnlEditorTop.TabIndex = 5;
-            // 
-            // rbPlaneA
-            // 
-            this.rbPlaneA.Appearance = System.Windows.Forms.Appearance.Button;
-            this.rbPlaneA.AutoSize = true;
-            this.rbPlaneA.Checked = true;
-            this.rbPlaneA.Dock = System.Windows.Forms.DockStyle.Left;
-            this.rbPlaneA.Location = new System.Drawing.Point(3, 3);
-            this.rbPlaneA.Name = "rbPlaneA";
-            this.rbPlaneA.Size = new System.Drawing.Size(59, 24);
-            this.rbPlaneA.TabIndex = 2;
-            this.rbPlaneA.TabStop = true;
-            this.rbPlaneA.Text = "PlaneA";
-            this.ttTooltip.SetToolTip(this.rbPlaneA, "Show PlaneA");
-            this.rbPlaneA.UseVisualStyleBackColor = true;
-            this.rbPlaneA.CheckedChanged += new System.EventHandler(this.rbPlaneA_CheckedChanged);
-            // 
-            // rbPlaneB
-            // 
-            this.rbPlaneB.Appearance = System.Windows.Forms.Appearance.Button;
-            this.rbPlaneB.AutoSize = true;
-            this.rbPlaneB.Dock = System.Windows.Forms.DockStyle.Left;
-            this.rbPlaneB.Location = new System.Drawing.Point(68, 3);
-            this.rbPlaneB.Name = "rbPlaneB";
-            this.rbPlaneB.Size = new System.Drawing.Size(59, 24);
-            this.rbPlaneB.TabIndex = 3;
-            this.rbPlaneB.TabStop = true;
-            this.rbPlaneB.Text = "PlaneB";
-            this.ttTooltip.SetToolTip(this.rbPlaneB, "Show PlaneB");
-            this.rbPlaneB.UseVisualStyleBackColor = true;
-            this.rbPlaneB.CheckedChanged += new System.EventHandler(this.rbPlaneB_CheckedChanged);
-            // 
-            // pnlMain
-            // 
-            this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.pnlMain.IsSplitterFixed = true;
-            this.pnlMain.Location = new System.Drawing.Point(3, 33);
-            this.pnlMain.Name = "pnlMain";
-            // 
-            // pnlMain.Panel1
-            // 
-            this.pnlMain.Panel1.Controls.Add(this.pnlBlocks);
-            this.pnlMain.Panel1.Controls.Add(this.pnlBlockInfo);
-            // 
-            // pnlMain.Panel2
-            // 
-            this.pnlMain.Panel2.Controls.Add(this.gridLevel);
-            this.pnlMain.Size = new System.Drawing.Size(961, 454);
-            this.pnlMain.SplitterDistance = 277;
-            this.pnlMain.TabIndex = 6;
-            // 
-            // pnlBlocks
-            // 
-            this.pnlBlocks.AutoScroll = true;
-            this.pnlBlocks.AutoScrollMargin = new System.Drawing.Size(2, 0);
-            this.pnlBlocks.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.pnlBlocks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlBlocks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlBlocks.Location = new System.Drawing.Point(0, 0);
-            this.pnlBlocks.Name = "pnlBlocks";
-            this.pnlBlocks.Size = new System.Drawing.Size(277, 278);
-            this.pnlBlocks.TabIndex = 11;
-            // 
-            // pnlBlockInfo
-            // 
-            this.pnlBlockInfo.AutoScroll = true;
-            this.pnlBlockInfo.AutoSize = true;
-            this.pnlBlockInfo.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.pnlBlockInfo.ColumnCount = 3;
-            this.pnlBlockInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.pnlBlockInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.pnlBlockInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.pnlBlockInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.pnlBlockInfo.Controls.Add(this.pnlCurrentBlock, 0, 0);
-            this.pnlBlockInfo.Controls.Add(this.chkVFlip, 2, 1);
-            this.pnlBlockInfo.Controls.Add(this.cbbPalIndex, 1, 1);
-            this.pnlBlockInfo.Controls.Add(this.cbbTileIndex, 0, 1);
-            this.pnlBlockInfo.Controls.Add(this.chkHFlip, 2, 0);
-            this.pnlBlockInfo.Controls.Add(this.btnCurrentTile, 1, 0);
-            this.pnlBlockInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBlockInfo.Location = new System.Drawing.Point(0, 278);
-            this.pnlBlockInfo.Name = "pnlBlockInfo";
-            this.pnlBlockInfo.RowCount = 2;
-            this.pnlBlockInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.pnlBlockInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.pnlBlockInfo.Size = new System.Drawing.Size(277, 176);
-            this.pnlBlockInfo.TabIndex = 9;
-            // 
-            // pnlCurrentBlock
-            // 
-            this.pnlCurrentBlock.AutoSize = true;
-            this.pnlCurrentBlock.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlCurrentBlock.Controls.Add(this.btnTile1);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile2);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile3);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile4);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile5);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile6);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile7);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile8);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile9);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile10);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile11);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile12);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile13);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile14);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile15);
-            this.pnlCurrentBlock.Controls.Add(this.btnTile16);
-            this.pnlCurrentBlock.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCurrentBlock.Location = new System.Drawing.Point(3, 3);
-            this.pnlCurrentBlock.Name = "pnlCurrentBlock";
-            this.pnlCurrentBlock.Size = new System.Drawing.Size(134, 134);
-            this.pnlCurrentBlock.TabIndex = 29;
-            // 
-            // btnTile1
-            // 
-            this.btnTile1.AutoSize = true;
-            this.btnTile1.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile1.Location = new System.Drawing.Point(0, 0);
-            this.btnTile1.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile1.Name = "btnTile1";
-            this.btnTile1.Size = new System.Drawing.Size(32, 32);
-            this.btnTile1.TabIndex = 0;
-            this.btnTile1.Tag = "";
-            this.btnTile1.UseVisualStyleBackColor = true;
-            this.btnTile1.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile2
-            // 
-            this.btnTile2.AutoSize = true;
-            this.btnTile2.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile2.Location = new System.Drawing.Point(33, 0);
-            this.btnTile2.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile2.Name = "btnTile2";
-            this.btnTile2.Size = new System.Drawing.Size(32, 32);
-            this.btnTile2.TabIndex = 1;
-            this.btnTile2.Tag = "";
-            this.btnTile2.UseVisualStyleBackColor = true;
-            this.btnTile2.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile3
-            // 
-            this.btnTile3.AutoSize = true;
-            this.btnTile3.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile3.Location = new System.Drawing.Point(66, 0);
-            this.btnTile3.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile3.Name = "btnTile3";
-            this.btnTile3.Size = new System.Drawing.Size(32, 32);
-            this.btnTile3.TabIndex = 2;
-            this.btnTile3.Tag = "";
-            this.btnTile3.UseVisualStyleBackColor = true;
-            this.btnTile3.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile4
-            // 
-            this.btnTile4.AutoSize = true;
-            this.btnTile4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnTile4.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.pnlCurrentBlock.SetFlowBreak(this.btnTile4, true);
-            this.btnTile4.Location = new System.Drawing.Point(99, 0);
-            this.btnTile4.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile4.Name = "btnTile4";
-            this.btnTile4.Size = new System.Drawing.Size(32, 32);
-            this.btnTile4.TabIndex = 3;
-            this.btnTile4.Tag = "";
-            this.btnTile4.UseVisualStyleBackColor = true;
-            this.btnTile4.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile5
-            // 
-            this.btnTile5.AutoSize = true;
-            this.btnTile5.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile5.Location = new System.Drawing.Point(0, 33);
-            this.btnTile5.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile5.Name = "btnTile5";
-            this.btnTile5.Size = new System.Drawing.Size(32, 32);
-            this.btnTile5.TabIndex = 4;
-            this.btnTile5.Tag = "";
-            this.btnTile5.UseVisualStyleBackColor = true;
-            this.btnTile5.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile6
-            // 
-            this.btnTile6.AutoSize = true;
-            this.btnTile6.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile6.Location = new System.Drawing.Point(33, 33);
-            this.btnTile6.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile6.Name = "btnTile6";
-            this.btnTile6.Size = new System.Drawing.Size(32, 32);
-            this.btnTile6.TabIndex = 5;
-            this.btnTile6.Tag = "";
-            this.btnTile6.UseVisualStyleBackColor = true;
-            this.btnTile6.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile7
-            // 
-            this.btnTile7.AutoSize = true;
-            this.btnTile7.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile7.Location = new System.Drawing.Point(66, 33);
-            this.btnTile7.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile7.Name = "btnTile7";
-            this.btnTile7.Size = new System.Drawing.Size(32, 32);
-            this.btnTile7.TabIndex = 6;
-            this.btnTile7.Tag = "";
-            this.btnTile7.UseVisualStyleBackColor = true;
-            this.btnTile7.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile8
-            // 
-            this.btnTile8.AutoSize = true;
-            this.btnTile8.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile8.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.pnlCurrentBlock.SetFlowBreak(this.btnTile8, true);
-            this.btnTile8.Location = new System.Drawing.Point(99, 33);
-            this.btnTile8.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile8.Name = "btnTile8";
-            this.btnTile8.Size = new System.Drawing.Size(32, 32);
-            this.btnTile8.TabIndex = 7;
-            this.btnTile8.Tag = "";
-            this.btnTile8.UseVisualStyleBackColor = true;
-            this.btnTile8.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile9
-            // 
-            this.btnTile9.AutoSize = true;
-            this.btnTile9.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile9.Location = new System.Drawing.Point(0, 66);
-            this.btnTile9.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile9.Name = "btnTile9";
-            this.btnTile9.Size = new System.Drawing.Size(32, 32);
-            this.btnTile9.TabIndex = 8;
-            this.btnTile9.Tag = "";
-            this.btnTile9.UseVisualStyleBackColor = true;
-            this.btnTile9.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile10
-            // 
-            this.btnTile10.AutoSize = true;
-            this.btnTile10.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile10.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile10.Location = new System.Drawing.Point(33, 66);
-            this.btnTile10.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile10.Name = "btnTile10";
-            this.btnTile10.Size = new System.Drawing.Size(32, 32);
-            this.btnTile10.TabIndex = 9;
-            this.btnTile10.Tag = "";
-            this.btnTile10.UseVisualStyleBackColor = true;
-            this.btnTile10.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile11
-            // 
-            this.btnTile11.AutoSize = true;
-            this.btnTile11.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile11.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile11.Location = new System.Drawing.Point(66, 66);
-            this.btnTile11.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile11.Name = "btnTile11";
-            this.btnTile11.Size = new System.Drawing.Size(32, 32);
-            this.btnTile11.TabIndex = 10;
-            this.btnTile11.Tag = "";
-            this.btnTile11.UseVisualStyleBackColor = true;
-            this.btnTile11.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile12
-            // 
-            this.btnTile12.AutoSize = true;
-            this.btnTile12.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile12.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.pnlCurrentBlock.SetFlowBreak(this.btnTile12, true);
-            this.btnTile12.Location = new System.Drawing.Point(99, 66);
-            this.btnTile12.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile12.Name = "btnTile12";
-            this.btnTile12.Size = new System.Drawing.Size(32, 32);
-            this.btnTile12.TabIndex = 11;
-            this.btnTile12.Tag = "";
-            this.btnTile12.UseVisualStyleBackColor = true;
-            this.btnTile12.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile13
-            // 
-            this.btnTile13.AutoSize = true;
-            this.btnTile13.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile13.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile13.Location = new System.Drawing.Point(0, 99);
-            this.btnTile13.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile13.Name = "btnTile13";
-            this.btnTile13.Size = new System.Drawing.Size(32, 32);
-            this.btnTile13.TabIndex = 12;
-            this.btnTile13.Tag = "";
-            this.btnTile13.UseVisualStyleBackColor = true;
-            this.btnTile13.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile14
-            // 
-            this.btnTile14.AutoSize = true;
-            this.btnTile14.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile14.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile14.Location = new System.Drawing.Point(33, 99);
-            this.btnTile14.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile14.Name = "btnTile14";
-            this.btnTile14.Size = new System.Drawing.Size(32, 32);
-            this.btnTile14.TabIndex = 15;
-            this.btnTile14.Tag = "";
-            this.btnTile14.UseVisualStyleBackColor = true;
-            this.btnTile14.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile15
-            // 
-            this.btnTile15.AutoSize = true;
-            this.btnTile15.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile15.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTile15.Location = new System.Drawing.Point(66, 99);
-            this.btnTile15.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile15.Name = "btnTile15";
-            this.btnTile15.Size = new System.Drawing.Size(32, 32);
-            this.btnTile15.TabIndex = 13;
-            this.btnTile15.Tag = "";
-            this.btnTile15.UseVisualStyleBackColor = true;
-            this.btnTile15.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // btnTile16
-            // 
-            this.btnTile16.AutoSize = true;
-            this.btnTile16.FlatAppearance.BorderColor = System.Drawing.SystemColors.Info;
-            this.btnTile16.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.pnlCurrentBlock.SetFlowBreak(this.btnTile16, true);
-            this.btnTile16.Location = new System.Drawing.Point(99, 99);
-            this.btnTile16.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
-            this.btnTile16.Name = "btnTile16";
-            this.btnTile16.Size = new System.Drawing.Size(32, 32);
-            this.btnTile16.TabIndex = 14;
-            this.btnTile16.Tag = "";
-            this.btnTile16.UseVisualStyleBackColor = true;
-            this.btnTile16.Click += new System.EventHandler(this.CurrentBlockTiles_Click);
-            // 
-            // chkVFlip
-            // 
-            this.chkVFlip.AutoSize = true;
-            this.chkVFlip.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkVFlip.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkVFlip.Location = new System.Drawing.Point(213, 143);
-            this.chkVFlip.Name = "chkVFlip";
-            this.chkVFlip.Size = new System.Drawing.Size(61, 18);
-            this.chkVFlip.TabIndex = 23;
-            this.chkVFlip.Text = "VFlip";
-            this.ttTooltip.SetToolTip(this.chkVFlip, "Flip Vertically");
-            this.chkVFlip.UseVisualStyleBackColor = true;
-            this.chkVFlip.Click += new System.EventHandler(this.cbbTileIndex_SelectionChangeCommitted);
-            // 
-            // cbbPalIndex
-            // 
-            this.cbbPalIndex.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.cbbPalIndex.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbbPalIndex.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbbPalIndex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbPalIndex.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbbPalIndex.ImageList = null;
-            this.cbbPalIndex.Indent = 0;
-            this.cbbPalIndex.ItemHeight = 24;
-            this.cbbPalIndex.Location = new System.Drawing.Point(143, 143);
-            this.cbbPalIndex.Name = "cbbPalIndex";
-            this.cbbPalIndex.Size = new System.Drawing.Size(64, 30);
-            this.cbbPalIndex.TabIndex = 18;
-            this.ttTooltip.SetToolTip(this.cbbPalIndex, "Palette selection");
-            this.cbbPalIndex.SelectionChangeCommitted += new System.EventHandler(this.cbbPalIndex_SelectionChangeCommitted);
-            // 
-            // cbbTileIndex
-            // 
-            this.cbbTileIndex.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.cbbTileIndex.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbbTileIndex.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbbTileIndex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbTileIndex.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbbTileIndex.ImageList = null;
-            this.cbbTileIndex.Indent = 0;
-            this.cbbTileIndex.ItemHeight = 24;
-            this.cbbTileIndex.Location = new System.Drawing.Point(3, 143);
-            this.cbbTileIndex.Name = "cbbTileIndex";
-            this.cbbTileIndex.Size = new System.Drawing.Size(134, 30);
-            this.cbbTileIndex.TabIndex = 17;
-            this.ttTooltip.SetToolTip(this.cbbTileIndex, "Tile selection");
-            this.cbbTileIndex.SelectionChangeCommitted += new System.EventHandler(this.cbbTileIndex_SelectionChangeCommitted);
-            // 
-            // chkHFlip
-            // 
-            this.chkHFlip.AutoSize = true;
-            this.chkHFlip.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.chkHFlip.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkHFlip.Location = new System.Drawing.Point(213, 119);
-            this.chkHFlip.Name = "chkHFlip";
-            this.chkHFlip.Size = new System.Drawing.Size(61, 18);
-            this.chkHFlip.TabIndex = 19;
-            this.chkHFlip.Text = "HFlip";
-            this.ttTooltip.SetToolTip(this.chkHFlip, "Flip horizontally");
-            this.chkHFlip.UseVisualStyleBackColor = true;
-            this.chkHFlip.Click += new System.EventHandler(this.cbbTileIndex_SelectionChangeCommitted);
-            // 
-            // btnCurrentTile
-            // 
-            this.btnCurrentTile.AutoSize = true;
-            this.btnCurrentTile.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnCurrentTile.Enabled = false;
-            this.btnCurrentTile.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnCurrentTile.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCurrentTile.Location = new System.Drawing.Point(143, 107);
-            this.btnCurrentTile.Name = "btnCurrentTile";
-            this.btnCurrentTile.Size = new System.Drawing.Size(64, 30);
-            this.btnCurrentTile.TabIndex = 25;
-            this.btnCurrentTile.UseVisualStyleBackColor = true;
-            // 
-            // gridLevel
-            // 
-            this.gridLevel.AllowUserToAddRows = false;
-            this.gridLevel.AllowUserToDeleteRows = false;
-            this.gridLevel.AllowUserToResizeColumns = false;
-            this.gridLevel.AllowUserToResizeRows = false;
-            this.gridLevel.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
-            this.gridLevel.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.gridLevel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.gridLevel.ColumnHeadersVisible = false;
-            this.gridLevel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.gridLevel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridLevel.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.gridLevel.Location = new System.Drawing.Point(0, 0);
-            this.gridLevel.MultiSelect = false;
-            this.gridLevel.Name = "gridLevel";
-            this.gridLevel.ReadOnly = true;
-            this.gridLevel.RowHeadersVisible = false;
-            this.gridLevel.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.gridLevel.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridLevel.ShowEditingIcon = false;
-            this.gridLevel.Size = new System.Drawing.Size(680, 454);
-            this.gridLevel.StandardTab = true;
-            this.gridLevel.TabIndex = 0;
-            this.gridLevel.VirtualMode = true;
-            this.gridLevel.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridLevel_CellMouseDown);
-            this.gridLevel.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridLevel_CellMouseEnter);
-            this.gridLevel.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridLevel_CellMouseLeave);
-            this.gridLevel.CellMouseMove += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridLevel_CellMouseMove);
-            this.gridLevel.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridLevel_CellMouseUp);
-            this.gridLevel.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.gridLevel_CellPainting);
-            this.gridLevel.SelectionChanged += new System.EventHandler(this.gridLevel_SelectionChanged);
-            // 
             // dlgSaveRom
             // 
             this.dlgSaveRom.DefaultExt = "bin";
@@ -773,7 +278,7 @@
             this.pbBossFace.Location = new System.Drawing.Point(142, 3);
             this.pbBossFace.Name = "pbBossFace";
             this.pbBossFace.Size = new System.Drawing.Size(160, 112);
-            this.pbBossFace.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pbBossFace.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbBossFace.TabIndex = 3;
             this.pbBossFace.TabStop = false;
             this.ttTooltip.SetToolTip(this.pbBossFace, "Right Click to select new Boss Face or save as Bitmap");
@@ -865,13 +370,13 @@
             this.chMania});
             this.lvDifficulty.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvDifficulty.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            listViewItem1.StateImageIndex = 0;
-            listViewItem2.StateImageIndex = 0;
-            listViewItem3.StateImageIndex = 0;
+            listViewItem7.StateImageIndex = 0;
+            listViewItem8.StateImageIndex = 0;
+            listViewItem9.StateImageIndex = 0;
             this.lvDifficulty.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3});
+            listViewItem7,
+            listViewItem8,
+            listViewItem9});
             this.lvDifficulty.LabelWrap = false;
             this.lvDifficulty.Location = new System.Drawing.Point(761, 3);
             this.lvDifficulty.Name = "lvDifficulty";
@@ -1120,7 +625,7 @@
             // tpEditor
             // 
             this.tpEditor.BackColor = System.Drawing.SystemColors.Control;
-            this.tpEditor.Controls.Add(this.pnlMain);
+            this.tpEditor.Controls.Add(this.tblEditorButtons);
             this.tpEditor.Controls.Add(this.pnlEditorTop);
             this.tpEditor.Location = new System.Drawing.Point(4, 23);
             this.tpEditor.Name = "tpEditor";
@@ -1128,6 +633,16 @@
             this.tpEditor.Size = new System.Drawing.Size(967, 490);
             this.tpEditor.TabIndex = 0;
             this.tpEditor.Text = "Level Editor";
+            // 
+            // pnlEditorTop
+            // 
+            this.pnlEditorTop.AutoSize = true;
+            this.pnlEditorTop.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.pnlEditorTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlEditorTop.Location = new System.Drawing.Point(3, 3);
+            this.pnlEditorTop.Name = "pnlEditorTop";
+            this.pnlEditorTop.Size = new System.Drawing.Size(961, 0);
+            this.pnlEditorTop.TabIndex = 5;
             // 
             // tpEvents
             // 
@@ -1302,20 +817,6 @@
             this.btnClearEvents.UseVisualStyleBackColor = true;
             this.btnClearEvents.Click += new System.EventHandler(this.btnClearEvents_Click);
             // 
-            // dlgOpenBmp
-            // 
-            this.dlgOpenBmp.DefaultExt = "bmp";
-            this.dlgOpenBmp.Filter = "BMP Files (*.bmp)|*.bmp|All Files (*.*)|*.*";
-            this.dlgOpenBmp.RestoreDirectory = true;
-            this.dlgOpenBmp.Title = "Please, choose your 80x56 bitmap...";
-            // 
-            // dlgSaveBmp
-            // 
-            this.dlgSaveBmp.DefaultExt = "bmp";
-            this.dlgSaveBmp.Filter = "BMP Files (*.bmp)|*.bmp|All Files (*.*)|*.*";
-            this.dlgSaveBmp.RestoreDirectory = true;
-            this.dlgSaveBmp.Title = "Where to save your Bitmap...";
-            // 
             // tpCompression
             // 
             this.tpCompression.Controls.Add(this.tcCompression);
@@ -1350,16 +851,6 @@
             this.tpRleCompression.Text = "RLE";
             this.tpRleCompression.UseVisualStyleBackColor = true;
             // 
-            // tpLzhufCompression
-            // 
-            this.tpLzhufCompression.Location = new System.Drawing.Point(4, 23);
-            this.tpLzhufCompression.Name = "tpLzhufCompression";
-            this.tpLzhufCompression.Padding = new System.Windows.Forms.Padding(3);
-            this.tpLzhufCompression.Size = new System.Drawing.Size(953, 457);
-            this.tpLzhufCompression.TabIndex = 1;
-            this.tpLzhufCompression.Text = "LZHUFF";
-            this.tpLzhufCompression.UseVisualStyleBackColor = true;
-            // 
             // tblRleData
             // 
             this.tblRleData.AllowUserToAddRows = false;
@@ -1369,14 +860,14 @@
             this.tblRleData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.tblRleData.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.tblRleData.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.tblRleData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.tblRleData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.tblRleData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tblRleData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clRleIdx,
@@ -1386,14 +877,14 @@
             this.clRleCmpSize,
             this.clRleUnpSize,
             this.clRleDescr});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.tblRleData.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.tblRleData.DefaultCellStyle = dataGridViewCellStyle8;
             this.tblRleData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblRleData.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.tblRleData.GridColor = System.Drawing.SystemColors.Control;
@@ -1402,14 +893,14 @@
             this.tblRleData.MultiSelect = false;
             this.tblRleData.Name = "tblRleData";
             this.tblRleData.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.tblRleData.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.tblRleData.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.tblRleData.RowHeadersVisible = false;
             this.tblRleData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tblRleData.ShowCellErrors = false;
@@ -1505,6 +996,72 @@
             this.btnRleExtract.Text = "Extract";
             this.btnRleExtract.UseVisualStyleBackColor = true;
             // 
+            // tpLzhufCompression
+            // 
+            this.tpLzhufCompression.Location = new System.Drawing.Point(4, 23);
+            this.tpLzhufCompression.Name = "tpLzhufCompression";
+            this.tpLzhufCompression.Padding = new System.Windows.Forms.Padding(3);
+            this.tpLzhufCompression.Size = new System.Drawing.Size(953, 457);
+            this.tpLzhufCompression.TabIndex = 1;
+            this.tpLzhufCompression.Text = "LZHUFF";
+            this.tpLzhufCompression.UseVisualStyleBackColor = true;
+            // 
+            // dlgOpenBmp
+            // 
+            this.dlgOpenBmp.DefaultExt = "bmp";
+            this.dlgOpenBmp.Filter = "BMP Files (*.bmp)|*.bmp|All Files (*.*)|*.*";
+            this.dlgOpenBmp.RestoreDirectory = true;
+            this.dlgOpenBmp.Title = "Please, choose your 80x56 bitmap...";
+            // 
+            // dlgSaveBmp
+            // 
+            this.dlgSaveBmp.DefaultExt = "bmp";
+            this.dlgSaveBmp.Filter = "BMP Files (*.bmp)|*.bmp|All Files (*.*)|*.*";
+            this.dlgSaveBmp.RestoreDirectory = true;
+            this.dlgSaveBmp.Title = "Where to save your Bitmap...";
+            // 
+            // tblEditorButtons
+            // 
+            this.tblEditorButtons.ColumnCount = 2;
+            this.tblEditorButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tblEditorButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tblEditorButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblEditorButtons.Controls.Add(this.btnImportTmx, 1, 0);
+            this.tblEditorButtons.Controls.Add(this.btnTmxExport, 0, 0);
+            this.tblEditorButtons.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tblEditorButtons.Location = new System.Drawing.Point(3, 3);
+            this.tblEditorButtons.Margin = new System.Windows.Forms.Padding(4);
+            this.tblEditorButtons.Name = "tblEditorButtons";
+            this.tblEditorButtons.RowCount = 1;
+            this.tblEditorButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblEditorButtons.Size = new System.Drawing.Size(961, 39);
+            this.tblEditorButtons.TabIndex = 6;
+            // 
+            // btnImportTmx
+            // 
+            this.btnImportTmx.AutoSize = true;
+            this.btnImportTmx.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnImportTmx.Location = new System.Drawing.Point(120, 4);
+            this.btnImportTmx.Margin = new System.Windows.Forms.Padding(4);
+            this.btnImportTmx.Name = "btnImportTmx";
+            this.btnImportTmx.Size = new System.Drawing.Size(122, 31);
+            this.btnImportTmx.TabIndex = 1;
+            this.btnImportTmx.Text = "Import from TMX";
+            this.btnImportTmx.UseVisualStyleBackColor = true;
+            // 
+            // btnTmxExport
+            // 
+            this.btnTmxExport.AutoSize = true;
+            this.btnTmxExport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnTmxExport.Location = new System.Drawing.Point(4, 4);
+            this.btnTmxExport.Margin = new System.Windows.Forms.Padding(4);
+            this.btnTmxExport.Name = "btnTmxExport";
+            this.btnTmxExport.Size = new System.Drawing.Size(108, 31);
+            this.btnTmxExport.TabIndex = 0;
+            this.btnTmxExport.Text = "Export to TMX";
+            this.btnTmxExport.UseVisualStyleBackColor = true;
+            this.btnTmxExport.Click += new System.EventHandler(this.btnTmxExport_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1513,24 +1070,12 @@
             this.Controls.Add(this.tcMain);
             this.Controls.Add(this.cbbLevels);
             this.Controls.Add(this.mnuMain);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClosed);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.mnuMain.ResumeLayout(false);
             this.mnuMain.PerformLayout();
-            this.pnlEditorTop.ResumeLayout(false);
-            this.pnlEditorTop.PerformLayout();
-            this.pnlMain.Panel1.ResumeLayout(false);
-            this.pnlMain.Panel1.PerformLayout();
-            this.pnlMain.Panel2.ResumeLayout(false);
-            this.pnlMain.ResumeLayout(false);
-            this.pnlBlockInfo.ResumeLayout(false);
-            this.pnlBlockInfo.PerformLayout();
-            this.pnlCurrentBlock.ResumeLayout(false);
-            this.pnlCurrentBlock.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBossFace)).EndInit();
             this.mnuBossFace.ResumeLayout(false);
             this.tcMain.ResumeLayout(false);
@@ -1548,6 +1093,8 @@
             this.tpRleCompression.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.tblRleData)).EndInit();
             this.pnlRleButtons.ResumeLayout(false);
+            this.tblEditorButtons.ResumeLayout(false);
+            this.tblEditorButtons.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1560,47 +1107,17 @@
         private System.Windows.Forms.ToolStripMenuItem mnuOpenROM;
         private System.Windows.Forms.ToolStripMenuItem mnuExit;
         private System.Windows.Forms.OpenFileDialog dlgOpenRom;
-        private System.Windows.Forms.FlowLayoutPanel pnlEditorTop;
-        private System.Windows.Forms.SplitContainer pnlMain;
         private System.Windows.Forms.ToolStripMenuItem mnuCloseROM;
-        private System.Windows.Forms.RadioButton rbPlaneA;
-        private System.Windows.Forms.RadioButton rbPlaneB;
-        private System.Windows.Forms.DataGridView gridLevel;
         private System.Windows.Forms.ToolStripMenuItem mnuHelp;
         private System.Windows.Forms.ToolStripMenuItem mnuAbout;
         private System.Windows.Forms.SaveFileDialog dlgSaveRom;
         private System.Windows.Forms.ToolStripMenuItem mnuEdit;
         private System.Windows.Forms.ToolStripMenuItem mnuUndo;
         private System.Windows.Forms.ToolStripMenuItem mnuRedo;
-        private System.Windows.Forms.TableLayoutPanel pnlBlockInfo;
-        private ImageComboBox.ImageComboBox cbbTileIndex;
-        private ImageComboBox.ImageComboBox cbbPalIndex;
-        private System.Windows.Forms.CheckBox chkHFlip;
-        private System.Windows.Forms.CheckBox chkVFlip;
         private System.Windows.Forms.ToolTip ttTooltip;
         private System.Windows.Forms.ToolStripSeparator mnuSeparator;
         private System.Windows.Forms.ToolStripMenuItem mnuSaveROMAs;
-        private System.Windows.Forms.Button btnCurrentTile;
-        private System.Windows.Forms.FlowLayoutPanel pnlBlocks;
-        private System.Windows.Forms.FlowLayoutPanel pnlCurrentBlock;
-        private System.Windows.Forms.Button btnTile1;
-        private System.Windows.Forms.Button btnTile2;
-        private System.Windows.Forms.Button btnTile3;
-        private System.Windows.Forms.Button btnTile4;
-        private System.Windows.Forms.Button btnTile5;
-        private System.Windows.Forms.Button btnTile6;
-        private System.Windows.Forms.Button btnTile7;
-        private System.Windows.Forms.Button btnTile8;
-        private System.Windows.Forms.Button btnTile9;
-        private System.Windows.Forms.Button btnTile10;
-        private System.Windows.Forms.Button btnTile11;
-        private System.Windows.Forms.Button btnTile12;
-        private System.Windows.Forms.Button btnTile13;
-        private System.Windows.Forms.Button btnTile14;
-        private System.Windows.Forms.Button btnTile15;
-        private System.Windows.Forms.Button btnTile16;
         private System.Windows.Forms.TabControl tcMain;
-        private System.Windows.Forms.TabPage tpEditor;
         private System.Windows.Forms.TabPage tpInitParams;
         private System.Windows.Forms.TableLayoutPanel tblLevelParams;
         private System.Windows.Forms.Label lbMusicIndex;
@@ -1660,6 +1177,11 @@
         private System.Windows.Forms.TableLayoutPanel pnlRleButtons;
         private System.Windows.Forms.Button btnRleImport;
         private System.Windows.Forms.Button btnRleExtract;
+        private System.Windows.Forms.TabPage tpEditor;
+        private System.Windows.Forms.FlowLayoutPanel pnlEditorTop;
+        private System.Windows.Forms.TableLayoutPanel tblEditorButtons;
+        private System.Windows.Forms.Button btnImportTmx;
+        private System.Windows.Forms.Button btnTmxExport;
     }
 }
 

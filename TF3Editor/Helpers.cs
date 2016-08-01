@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace TF3Editor
+namespace Helpers
 {
-    public static class ControlExtentions
+    public static class Helper
     {
         /// <summary>
         /// Turn on or off control double buffering (Dirty hack!)
@@ -19,44 +22,116 @@ namespace TF3Editor
             PropertyInfo pi = controlType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
             pi.SetValue(control, setting, null);
         }
-    }    
-    
-    public static class Helpers
-    {
-        // Note this MODIFIES THE GIVEN ARRAY then returns a reference to the modified array.
-        public static byte[] Reverse(this byte[] b)
+
+        public static int SearchBytes(byte[] array, byte[] value, int from)
         {
-            Array.Reverse(b);
-            return b;
+            int found = 0;
+            for (int i = from; i < array.Length; i++)
+            {
+                if (array[i] == value[found])
+                {
+                    if (++found == value.Length)
+                    {
+                        return i - found + 1;
+                    }
+                }
+                else
+                {
+                    found = 0;
+                }
+            }
+            return -1;
         }
 
-        public static UInt16 ReadUInt16BE(this BinaryReader binRdr)
+        public static void FixAllRefs(byte[] rom, int oldAddr, int newAddr)
         {
-            return BitConverter.ToUInt16(binRdr.ReadBytesRequired(sizeof(UInt16)).Reverse(), 0);
+            List<int> refs = new List<int>();
+
+            int refFrom = -1;
+            byte[] searchBytes = new byte[4];
+            searchBytes.WriteLong(0, (uint)oldAddr);
+            while ((refFrom = SearchBytes(
+                rom, searchBytes, refFrom + 1
+                )) != -1)
+            {
+                refs.Add(refFrom);
+            }
+
+            for (int j = 0; j < refs.Count; ++j)
+            {
+                rom.WriteLong(refs[j], (uint)newAddr);
+            }
         }
 
-        public static UInt16 ReadUInt16BE(this byte[] array, int index)
+        public static ushort ReadWord(this byte[] array, int index)
         {
             return (ushort)((array[index] << 8) | array[index + 1]);
         }
 
-        public static UInt32 ReadUInt32BE(this BinaryReader binRdr)
+        public static byte ReadByteInc(this MemoryStream stream)
         {
-            return BitConverter.ToUInt32(binRdr.ReadBytesRequired(sizeof(UInt32)).Reverse(), 0);
+            byte[] array = new byte[1];
+            stream.Read(array, 0, array.Length);
+            return array[0];
         }
 
-        public static UInt32 ReadUInt32BE(this byte[] array, int index)
+        public static ushort ReadWord(this MemoryStream stream)
         {
+            long pos = stream.Position;
+
+            byte[] array = new byte[2];
+            stream.Read(array, 0, array.Length);
+
+            stream.Position = pos;
+            return (ushort)((array[0] << 8) | array[1]);
+        }
+
+        public static ushort ReadWordInc(this MemoryStream stream)
+        {
+            byte[] array = new byte[2];
+            stream.Read(array, 0, array.Length);
+            return (ushort)((array[0] << 8) | array[1]);
+        }
+
+        public static uint ReadLong(this byte[] array, int index)
+        {
+            if (array == null) return 0;
             return (uint)((array[index] << 24) | (array[index + 1] << 16) | (array[index + 2] << 8) | array[index + 3]);
         }
 
-        public static void WriteUInt16BE(this byte[] array, int index, ushort value)
+        public static uint ReadLong(this MemoryStream stream)
+        {
+            long pos = stream.Position;
+
+            byte[] array = new byte[4];
+            stream.Read(array, 0, array.Length);
+
+            stream.Position = pos;
+            return (uint)((array[0] << 24) | (array[1] << 16) | (array[2] << 8) | array[3]);
+        }
+
+        public static uint ReadLongInc(this MemoryStream stream)
+        {
+            byte[] array = new byte[4];
+            stream.Read(array, 0, array.Length);
+            return (uint)((array[0] << 24) | (array[1] << 16) | (array[2] << 8) | array[3]);
+        }
+
+        public static void WriteWord(this byte[] array, int index, ushort value)
         {
             array[index++] = (byte)((value >> 8) & 0xFF);
             array[index] = (byte)(value & 0xFF);
         }
 
-        public static void WriteUInt32BE(this byte[] array, int index, uint value)
+        public static void WriteWordInc(this MemoryStream stream, ushort value)
+        {
+            byte[] array = new byte[2];
+            array[0] = (byte)((value >> 8) & 0xFF);
+            array[1] = (byte)(value & 0xFF);
+            stream.Write(array, 0, array.Length);
+        }
+
+        public static void WriteLong(this byte[] array, int index, uint value)
         {
             array[index++] = (byte)((value >> 24) & 0xFF);
             array[index++] = (byte)((value >> 16) & 0xFF);
@@ -64,34 +139,103 @@ namespace TF3Editor
             array[index] = (byte)(value & 0xFF);
         }
 
-        public static byte[] ReadBytesRequired(this BinaryReader binRdr, int byteCount)
+        public static void WriteLongInc(this MemoryStream stream, uint value)
         {
-            var result = binRdr.ReadBytes(byteCount);
-
-            if (result.Length != byteCount)
-                throw new EndOfStreamException(string.Format("{0} bytes required from stream, but only {1} returned.", byteCount, result.Length));
-
-            return result;
+            byte[] array = new byte[4];
+            array[0] = (byte)((value >> 24) & 0xFF);
+            array[1] = (byte)((value >> 16) & 0xFF);
+            array[2] = (byte)((value >> 8) & 0xFF);
+            array[3] = (byte)(value & 0xFF);
+            stream.Write(array, 0, array.Length);
         }
 
-        private static ushort SwapUInt16(ushort UInt16)
+        public static void IncPos(this MemoryStream stream, int value)
         {
-            return (ushort)(((UInt16 & 0xff) << 8) | ((UInt16 >> 8) & 0xff));
+            stream.Seek(value, SeekOrigin.Current);
         }
 
-        private static uint SwapUInt32(uint UInt32)
+        public static void SubPos(this MemoryStream stream, int value)
         {
-            return (uint)(((SwapUInt16((ushort)UInt32) & 0xffff) << 0x10) | (SwapUInt16((ushort)(UInt32 >> 0x10)) & 0xffff));
+            stream.Seek(-value, SeekOrigin.Current);
         }
 
-        public static void WriteUInt16BE(this BinaryWriter binWrt, ushort Word)
+        public static uint mask(byte bit_idx, byte bits_cnt = 1)
         {
-            binWrt.Write(SwapUInt16(Word));
+            return (uint)(((1 << bits_cnt) - 1) << bit_idx);
         }
 
-        public static void WriteUInt32BE(this BinaryWriter binWrt, uint Uint)
+        public static Bitmap CropImage(Bitmap source, Rectangle cropArea)
         {
-            binWrt.Write(SwapUInt32(Uint));
+            return source.Clone(cropArea, source.PixelFormat);
+        }
+
+        public static byte[] BitmapToArray(Bitmap image)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                image.Save(ms, ImageFormat.Png);
+                return ms.ToArray();
+            }
+        }
+
+        public static Bitmap BitmapFromArray(byte[] array)
+        {
+            using (var ms = new MemoryStream(array))
+            {
+                return new Bitmap(ms);
+            }
+        }
+
+        public static class CompareByteArrays
+        {
+            [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl)]
+            private static extern int memcmp(byte[] b1, byte[] b2, long count);
+
+            static public bool Compare(byte[] b1, byte[] b2)
+            {
+                return b1.Length == b2.Length && memcmp(b1, b2, b1.Length) == 0;
+            }
+        }
+
+        public class ByteArraysComparer : IEqualityComparer<byte[]>
+        {
+            public bool Equals(byte[] x, byte[] y)
+            {
+                return Helper.CompareByteArrays.Compare(x, y);
+            }
+
+            public int GetHashCode(byte[] obj)
+            {
+                var str = Convert.ToBase64String(obj);
+                return str.GetHashCode();
+            }
+        }
+
+        public class ByteArraysCompareKey : IEqualityComparer<Tuple<byte[], int>>
+        {
+            public bool Equals(Tuple<byte[], int> x, Tuple<byte[], int> y)
+            {
+                return Helper.CompareByteArrays.Compare(x.Item1, y.Item1);
+            }
+
+            public int GetHashCode(Tuple<byte[], int> obj)
+            {
+                var str = Convert.ToBase64String(obj.Item1);
+                return str.GetHashCode();
+            }
+        }
+
+        public class ByteArraysCompareValue : IEqualityComparer<Tuple<byte[], int>>
+        {
+            public bool Equals(Tuple<byte[], int> x, Tuple<byte[], int> y)
+            {
+                return (x.Item2 == y.Item2);
+            }
+
+            public int GetHashCode(Tuple<byte[], int> obj)
+            {
+                return obj.Item2.GetHashCode();
+            }
         }
 
         public static string ReadASCIIString(this byte[] array, int offset)
