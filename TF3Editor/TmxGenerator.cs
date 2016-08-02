@@ -11,9 +11,9 @@ namespace TMX
     {
         private XDocument tmx = null;
 
-        public delegate int FuncXYtoTileIndex(ushort width, ushort x, ushort y);
+        public delegate int FuncXYtoTileIndex(ushort width, ushort height, ushort x, ushort y);
 
-        public delegate Tuple<ushort, ushort> FuncTileIndexToXY(ushort width, int tileIndex);
+        public delegate Tuple<ushort, ushort> FuncTileIndexToXY(ushort width, ushort height, int tileIndex);
 
         public TmxGenerator()
         {
@@ -150,7 +150,7 @@ namespace TMX
             for (ushort y = 0; y < layerHeight; ++y)
                 for (ushort x = 0; x < layerWidth; ++x)
                 {
-                    int idx = funcXYtoTileIndex(layerWidth, x, y);
+                    int idx = funcXYtoTileIndex(layerWidth, layerHeight, x, y);
                     ushort word = mapping[idx];
 
                     uint gid = Mapper.TileIdx(word);
@@ -203,7 +203,7 @@ namespace TMX
                     if (HF) gid -= 0x80000000;
                     if (VF) gid -= 0x40000000;
 
-                    int idx = funcXYtoTileIndex(layerWidth, x, y);
+                    int idx = funcXYtoTileIndex(layerWidth, layerHeight, x, y);
                     mapping[idx] = Mapper.EncodeTileInfo((ushort)gid, HF, VF, palIndex, false);
                 }
         }

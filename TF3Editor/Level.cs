@@ -269,7 +269,7 @@ namespace TF3Editor
             byte[] mapping = Decompress(1);
             byte[] retn = new byte[0x2000];
 
-            Array.Copy(mapping, (isPlaneA ? 0x4000: 0x6000), retn, 0, 0x2000);
+            Array.Copy(mapping, (isPlaneA ? 0x4000: 0x6000), retn, 0, (isPlaneA ? 0x2000 : 0x1000));
             return retn;
         }
 
@@ -324,9 +324,9 @@ namespace TF3Editor
             return retn;
         }
 
-        public static int ConvertXYtoTileIndex(ushort width, ushort x, ushort y)
+        public static int ConvertXYtoTileIndex(ushort width, ushort height, ushort x, ushort y)
         {
-            return (x / 2) * 4 + (width / 2) * (y / 2) * 4 + (y % 2) * 2 + (x % 2);
+            return x * height + y;
         }
 
         public void TmxExport(string path)
@@ -336,9 +336,9 @@ namespace TF3Editor
 
             TmxGenerator tmx = new TmxGenerator();
 
-            const ushort widthAB = 0x200;
-            const ushort heightA = 16;
-            const ushort heightB = 8;
+            const ushort widthAB = 0x200 * 2;
+            const ushort heightA = 16 * 2;
+            const ushort heightB = 8 * 2;
 
             tmx.WriteMap(widthAB, heightA);
 
