@@ -264,13 +264,13 @@ namespace TF3Editor
             return Decompress(0);//0x300 tiles, but 0x200..0x2FF - only for animation and can't be selected.
         }
 
-        private ushort[] GetBlocksMapping(bool isPlaneA)
+        private byte[] GetBlocksMapping(bool isPlaneA)
         {
             byte[] mapping = Decompress(1);
             byte[] retn = new byte[0x2000];
 
             Array.Copy(mapping, (isPlaneA ? 0x4000: 0x6000), retn, 0, 0x2000);
-            return Mapper.ByteMapToWordMap(retn);
+            return retn;
         }
 
         private ushort[] GetTilesMapping(bool isPlaneA)
@@ -287,7 +287,7 @@ namespace TF3Editor
             const ushort width = 0x200;
             ushort height = (ushort)(isPlaneA ? 16 : 8);
 
-            ushort[] blocksMap = GetBlocksMapping(isPlaneA);
+            byte[] blocksMap = GetBlocksMapping(isPlaneA);
             ushort[] tilesMap = GetTilesMapping(isPlaneA);
 
             ushort[] out_mapping = new ushort[width * height * 4];
