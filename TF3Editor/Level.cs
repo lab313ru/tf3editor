@@ -264,23 +264,48 @@ namespace TF3Editor
             return Decompress(0);//0x300 tiles, but 0x200..0x2FF - only for animation and can't be selected.
         }
 
-        public byte[] GetMappingA()
+        private ushort[] GetBlocksMapping(bool isPlaneA)
         {
             byte[] mapping = Decompress(1);
             byte[] retn = new byte[0x2000];
 
-            Array.Copy(mapping, 0, retn, 0, 0x2000);
-            return retn;
+            Array.Copy(mapping, (isPlaneA ? 0x4000: 0x6000), retn, 0, 0x2000);
+            return Mapper.ByteMapToWordMap(retn);
         }
 
-        public byte[] GetMappingB()
+        private ushort[] GetTilesMapping(bool isPlaneA)
         {
             byte[] mapping = Decompress(1);
             byte[] retn = new byte[0x2000];
 
-            Array.Copy(mapping, 0x2000, retn, 0, 0x2000);
-            return retn;
+            Array.Copy(mapping, (isPlaneA ? 0x0000 : 0x2000), retn, 0, 0x2000);
+            return Mapper.ByteMapToWordMap(retn);
         }
+
+        public ushort[] GetMapMapping(bool isPlaneA)
+        {
+            const ushort width = 0x200;
+            ushort height = (ushort)(isPlaneA ? 16 : 8);
+
+            ushort[] blocksMap = GetBlocksMapping(isPlaneA);
+            ushort[] tilesMap = GetTilesMapping(isPlaneA);
+
+            ushort[] out_mapping = new ushort[width * height * 4];
+            int write_pos = 0;
+
+            for (int y = 0; y < height; ++y)
+                for (int x = 0; x < width; ++x)
+                {
+                    int block_idx = blocksMap[y * height + x] * 4; // 4 tiles per block
+
+                    out_mapping[write_pos++] = tilesMap[block_idx++];
+                    out_mapping[write_pos++] = tilesMap[block_idx++];
+                    out_mapping[write_pos++] = tilesMap[block_idx++];
+                    out_mapping[write_pos++] = tilesMap[block_idx++];
+                }
+
+            return out_mapping;
+        } 
 
         public byte[] GetSprites()
         {
@@ -320,8 +345,8 @@ namespace TF3Editor
             byte[] tilesAB = GetTiles();
             Color[][] caPaletteAB = GetPalette();
 
-            ushort[] mappingA = Mapper.ByteMapToWordMap(GetMappingA());
-            ushort[] mappingB = Mapper.ByteMapToWordMap(GetMappingB());
+            ushort[] mappingA = GetMapMapping(true);
+            ushort[] mappingB = GetMapMapping(false);
 
             int countPlaneA = TmxGenerator.TilesetExport(tilesetA, tilesAB, caPaletteAB[0]);
 
