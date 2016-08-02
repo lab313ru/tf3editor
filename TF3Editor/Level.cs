@@ -267,18 +267,18 @@ namespace TF3Editor
         public byte[] GetMappingA()
         {
             byte[] mapping = Decompress(1);
-            byte[] retn = new byte[0x1000];
+            byte[] retn = new byte[0x2000];
 
-            Array.Copy(mapping, 0, retn, 0, 0x1000);
+            Array.Copy(mapping, 0, retn, 0, 0x2000);
             return retn;
         }
 
         public byte[] GetMappingB()
         {
             byte[] mapping = Decompress(1);
-            byte[] retn = new byte[0x1000];
+            byte[] retn = new byte[0x2000];
 
-            Array.Copy(mapping, 0x2000, retn, 0, 0x1000);
+            Array.Copy(mapping, 0x2000, retn, 0, 0x2000);
             return retn;
         }
 
